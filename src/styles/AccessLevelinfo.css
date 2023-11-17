@@ -1,0 +1,25 @@
+.access-level-info {
+  padding: 20px;
+  text-align: center;
+  background-color: #fff; /* White background for contrast */
+}
+
+.access-level-info h2 {
+  color: #007bff; /* Primary color for the heading */
+  margin-bottom: 30px;
+}
+
+.access-description {
+  margin-bottom: 20px;
+  color: #212529; /* Dark text color */
+}
+
+.access-description h3 {
+  font-size: 1.2rem;
+  color: #28a745; /* Green color for sub-headings */
+}
+
+.access-description p {
+  font-size: 1rem;
+  line-height: 1.5
+}

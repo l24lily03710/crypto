@@ -1,0 +1,41 @@
+/* Global Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; /* Example font */
+}
+
+/* Container for the entire app */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navigation styles, if you have a navbar */
+.navbar {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+}
+
+/* Link styles */
+a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Footer styles, if you have a footer */
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-top: auto; /* Pushes the footer to the bottom */
+}
