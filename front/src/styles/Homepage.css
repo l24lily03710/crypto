@@ -1,0 +1,221 @@
+
+.Homepage {
+  font-family: 'Arial', sans-serif;
+  color: #ffffff;
+  background-color: #302c42;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.Navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #394056; /* Slightly lighter than page background for effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+}
+.Navbar-left {
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer; /* Changes cursor to pointer */
+}
+
+.Navbar-left span {
+  font-size: 1.5em;
+  font-weight: bold;
+  background: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease-in-out;
+}
+
+.Navbar-left span:hover {
+  transform: scale(1.1);
+}
+
+
+ .Navbar-right span {
+  margin: 0 10px;
+  cursor: pointer;
+  color: #ffffff;
+  transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+.Navbar-right span:hover {
+  color: #6dd5ed; /* Change color on hover */
+}
+  .Navbar-right .SignInButton {
+    background: linear-gradient(to right, #6dd5ed, #2193b0);
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    font-weight: bold; /* Make text bold */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Add shadow for depth */
+    cursor: pointer;
+    transition: transform 0.3s; /* Smooth transition for hover effect */
+  }
+  
+.Navbar-right .SignInButton:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+  
+  .Main-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .Content-left {
+    max-width: 50%;
+    color: #ffffff; /* White color for main content text */
+    float: left; /* Align to the left */
+    font-size: 1.1em; /* Slightly larger font size */
+    line-height: 1.5; /* Improve line spacing for readability */
+  }
+  .Content-right{
+    max-width: 30%; /* Half of the main content */
+    float: right;
+  
+  }
+  .Content-right .SiteImage {
+    clip-path: circle(50% at 50% 50%);
+    width: 100%; /* Full width of the container */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 20px; /* Rounded edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+  }
+  
+  .Content-right img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  
+  .Content-left h1, .Section h2 {
+    background: linear-gradient(to right, #6dd5ed, #2193b0);
+    background-clip: text; 
+    -webkit-background-clip: text;
+    color: transparent; /* Transparent color to reveal the gradient */
+  }
+  
+  .Sections {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px; /* Adjusted for spacing */
+    padding: 20px;
+  
+  }
+  
+  .Section {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    background: radial-gradient(circle, #4e5870 0%, #393e46 100%); /* Radial gradient for section background */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 30%; /* Smaller width for each section */
+    margin: 0 auto; /* Centering sections */
+    font-size: 1em; /* Adjust font size */
+    line-height: 1.4; /* Line spacing */
+  }
+  
+  .Section img {
+    max-width: 60px; /* Slightly larger icons */
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  /* Media Query for smaller screens */
+  @media (max-width: 768px) {
+    .Main-content, .Sections {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .Content-left, .Content-right, .Section {
+      max-width: 100%;
+      float: none; /* Clear float for smaller screens */
+    }
+    .Sections {
+      flex-direction: column;
+      align-items: center;
+    }
+    .Navbar-right .SignInButton {
+      font-size: 0.9em; /* Slightly smaller font size for mobile */
+    }
+  }
+
+ .Navbar-right span {
+  margin: 0 10px;
+  cursor: pointer;
+  color: #ffffff;
+  transition: color 0.3s; /* Smooth transition for hover effect */
+}
+.Navbar-left span {
+  font-size: 1.2em; /* Slightly smaller font size for mobile */
+}
+
+.Navbar-right span:hover {
+  color: #6dd5ed; /* Color change on hover */
+}
+
+.Navbar-right .SignInButton {
+  background:linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+
+.Main-content {
+  display: flex;
+  justify-content: space-between; /* Adjust for equal spacing */
+  align-items: center;
+  padding: 20px;
+  flex-grow: 1; /* Allow content to grow and fill available space */
+}
+
+.Content-left {
+  max-width: 55%; /* Slightly more space than the image */
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+
+.Content-right {
+  max-width: 45%; /* Slightly less space than the content */
+  display: flex;
+  justify-content: center; /* Center the image within the space */
+}
+
+.Content-right .SiteImage {
+  max-width: 90%; /* Smaller size than the container */
+  height: auto;
+  border-radius: 20px; /* Softer edges */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Section and other styles remain the same */
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .Main-content, .Sections {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .Content-left, .Content-right, .Section {
+    max-width: 100%;
+  }
+
+  .Navbar-right .SignInButton {
+    font-size: 0.9em;
+  }
+}

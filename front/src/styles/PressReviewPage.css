@@ -1,0 +1,21 @@
+.press-review-page {
+  padding: 20px;
+}
+
+.articles-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.article-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.article-image {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+}
+

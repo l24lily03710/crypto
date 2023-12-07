@@ -1,0 +1,140 @@
+.profile-container {
+  background-color: #302c42;
+  color: #ffffff;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  align-items: center;
+  gap: 20px; /* Add gap between form elements */
+}
+
+.profile-form h2 {
+  color: #6dd5ed;
+  margin-bottom: 20px;
+}
+
+.field-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #ffffff; /* Ensure label color is visible */
+}
+
+.profile-form input, .profile-form select, .profile-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #394056;
+  color: #ffffff;
+  font-size: 1em;
+  font-family: 'Arial', sans-serif;
+}
+
+.profile-form input::placeholder {
+  color: #b0b0b0;
+}
+
+.profile-form input:focus {
+  outline: none;
+  border: 1px solid #6dd5ed;
+}
+
+.profile-form button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-image: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.profile-form button:hover {
+  background-color: #2193b0;
+}
+
+.profile-form .error-message {
+  color: #ff6b6b;
+  margin-top: 10px;
+}
+
+/* Add styling for the selected tags */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.selected-tags span {
+  background-color: #6dd5ed;
+  color: #302c42;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.selected-tags span:hover {
+  background-color: #2193b0;
+}
+
+/* Styling for custom dropdown */
+.dropdown {
+  width: 100%;
+}
+
+.dropdown-header {
+  background-color: #394056;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dropdown-list {
+  background-color: #394056;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 10;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.dropdown-item input[type='checkbox'] {
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .profile-form {
+    max-width: 90%;
+  }
+}
