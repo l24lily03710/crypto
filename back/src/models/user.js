@@ -4,8 +4,7 @@ const  bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   mail: { type: String, required: true, unique: true},
-  password: { type: String, required: true },
-  googleId: { type: String, unique: true, sparse: true }, // Unique Google ID
+  password: { type: String, required: true }
 });
 
 // Hash password
@@ -25,22 +24,9 @@ userSchema.pre('save', function (next) {
   });
 });
 
-// Static method to find or create user
-userSchema.statics.findOrCreate = function (condition, callback) {
-  const self = this;
-  self.findOne(condition, function (err, result) {
-    if (err) {
-      callback(err, null);
-    } else if (result) {
-      callback(err, result);
-    } else {
-      let newUser = new self(condition);
-      newUser.save(function (err, savedUser) {
-        callback(err, savedUser);
-      });
-    }
-  });
-};
+/*userSchema.virtual("id").get(function () {
+  return this._id;
+});*/
 userSchema.set("toJSON", {
   virtuals: true,
   versionKey: false,

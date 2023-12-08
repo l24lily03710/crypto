@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import OAuthLogin from '../components/OAuthLogin';
 import '../styles/LoginPage.css';
 import { useAccessLevel } from '../contexts/AccessLevelContext';
 
@@ -12,27 +13,15 @@ const LoginPage = () => {
   const { setIsLoggedIn, setAccessLevel } = useAccessLevel();
 
   useEffect(() => {
-    // Check for OAuth token in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-  
+    const token = localStorage.getItem('token');
     if (token) {
-      localStorage.setItem('token', token);
-      setIsLoggedIn(true);
-      setAccessLevel('User'); // Adjust as needed
-      navigate('/profile'); // Redirect to profile or desired page
+      navigate('/'); // Redirect to the profile page if already logged in
     }
-  }, [navigate, setIsLoggedIn, setAccessLevel]);
+  }, [navigate]);
 
-
-  const handleOAuthLogin = () => {
-    // Redirect to your backend OAuth endpoint
-    window.location.href = 'http://localhost:3000/users/auth/google';
-  };
-  
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/users/login', {
+      const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,8 +35,6 @@ const LoginPage = () => {
       const data = await response.json();
       if (response.status === 200) {
         localStorage.setItem('token', data.token);
-
-        localStorage.setItem('userID', data.user_id);
         setIsLoggedIn(true);
         setAccessLevel('User'); // Adjust this based on your application's needs
         navigate('/profile');
@@ -61,7 +48,7 @@ const LoginPage = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch('http://localhost:3000/users/register', {
+      const response = await fetch('http://localhost:3000/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,8 +63,6 @@ const LoginPage = () => {
       const data = await response.json();
       if (response.status === 200) {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('userID', data.user_id);
-        
         setIsLoggedIn(true);
         setAccessLevel('User'); // Adjust this based on your application's needs
         navigate('/profile');
@@ -127,9 +112,9 @@ const LoginPage = () => {
           )}
           <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
         </form>  
-        <button onClick={handleOAuthLogin} className="google-login-btn">
-          Login with Google
-        </button>
+        <div className="oauth-login-section">
+          <OAuthLogin />
+        </div>
         <button type="button" onClick={toggleAuthMode} className="toggle-auth-mode">
           {isRegistering ? 'Already have an account? Login' : 'Need an account? Register'}
         </button>

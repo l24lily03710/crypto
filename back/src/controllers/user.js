@@ -1,6 +1,6 @@
 const User = require("../models/user");
 
-const { body, validationResult } = require("express-validator");
+const { param, body, validationResult } = require("express-validator");
 
 const userValidationRules = () => {
   return [

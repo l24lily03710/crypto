@@ -7,15 +7,13 @@ const jwt = require("jsonwebtoken");
 dotenv.config();
 const secretKey = process.env.SECRET_KEY;
 
-
-
 exports.login = async (req, res) => {
   const { mail, password } = req.body;
 
   try {
     const user = await User.findOne({ mail });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user || !bcrypt.compare(password, user.password)) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
@@ -24,10 +22,7 @@ exports.login = async (req, res) => {
         console.error(err);
         res.status(500).json({ error: "Internal Server Error" });
       } else {
-        const { _id: user_id } = user;
-
         res.json({
-          user_id,
           token,
         });
       }
@@ -37,8 +32,6 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
 exports.register = async (req, res) => {
   const { username, mail, password } = req.body;
 
@@ -61,10 +54,7 @@ exports.register = async (req, res) => {
           console.error(err);
           res.status(500).json({ error: "Internal Server Error" });
         } else {
-          const { _id: user_id } = savedUser;
-
           res.json({
-            user_id,
             token,
           });
         }

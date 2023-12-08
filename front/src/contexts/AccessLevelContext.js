@@ -30,4 +30,3 @@ export const AccessLevelProvider = ({ children }) => {
     </AccessLevelContext.Provider>
   );
 };
-export default AccessLevelContext ;

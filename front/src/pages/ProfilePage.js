@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/ProfilePage.css';
 
-
-const Dropdown = ({ options, selectedItems = [], setSelectedItems, label }) => {
+const Dropdown = ({ options, selectedItems, setSelectedItems, label }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -39,15 +38,13 @@ const Dropdown = ({ options, selectedItems = [], setSelectedItems, label }) => {
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({
-    username: '',
-    mail: '',       
+    nickname: '',
     defaultCurrency: 'EUR',
     cryptoList: [],
     keywords: [],
   });
 
-  const [cryptoOptions, setCryptoOptions] = useState([]);
-
+  const cryptoOptions = ['Bitcoin', 'Ethereum', 'Litecoin', 'Ripple'];
   const keywordOptions = ['blockchain', 'mining', 'crypto', 'ledger'];
 
   const navigate = useNavigate();
@@ -56,83 +53,35 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userID');
-    if (!token || !userId) {
+    if (!token) {
       navigate('/login');
     } else {
-      fetchProfileData(userId);
-      fetchCryptoOptions();
+      fetchProfileData();
     }
   }, [navigate]);
 
-  const fetchProfileData = async (userId) => {
-    const token = localStorage.getItem('token'); 
+  const fetchProfileData = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/users/profile/${userId}`, {
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
-      if (response.status === 200) {
+      setTimeout(() => {
         setProfile({
-          username: data.username,
-          mail: data.mail,     
+          nickname: 'User123',
+          defaultCurrency: 'EUR',
+          cryptoList: ['Bitcoin', 'Ethereum'],
+          keywords: ['blockchain', 'mining']
         });
-      } else {
-        setErrorMessage(data.error || 'Failed to load profile data.');
-      }
+        setLoading(false);
+      }, 1000);
     } catch (error) {
-      setErrorMessage('Failed to load profile data.');
-    } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchCryptoOptions = async () => {
-    const token = localStorage.getItem('token'); 
-    try {
-      const response = await fetch('http://localhost:3000/cryptos', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
-      if (response.status === 200) {
-        setCryptoOptions(data.map(crypto => crypto.crypto_name));
-      } else {
-        console.error('Failed to fetch crypto options');
-      }
-    } catch (error) {
-      console.error('Error fetching crypto options:', error);
+      setErrorMessage('Failed to load profile data.');
     }
   };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userID');
-    if (!userId) {
-      setErrorMessage('User ID not found.');
-      return;
-    }
-
     try {
-      const response = await fetch(`http://localhost:3000/user/profile/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          username: profile.username, // Use the state variable for username
-          mail: profile.mail,         // Use the state variable for email
-   
-        })
-      });
-      const data = await response.json();
-      if (response.status === 200) {
-        alert('Profile updated successfully!');
-      } else {
-        setErrorMessage(data.error || 'Failed to update profile.');
-      }
+      alert('Profile updated successfully!');
+      // Here, you would send a PUT request to update the profile
     } catch (error) {
       setErrorMessage('Failed to update profile.');
     }
@@ -143,28 +92,17 @@ const ProfilePage = () => {
       <Header />
       <div className="profile-container">
         <h2>Profile Page</h2>
-        {loading && <p>Loading...</p>}
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         <form onSubmit={handleUpdateProfile} className="profile-form">
           <div className="field-group">
-           <label>Username:</label>
-           <input
-              type="text"
-              name="username"
-              value={profile.username}
-              onChange={(e) => setProfile({ ...profile, username: e.target.value })}
-            />
-          </div>
-          <div className="field-group">
-            <label>Email:</label>
+            <label>Nickname:</label>
             <input
-              type="email"
-              name="mail"
-              value={profile.mail}
-              onChange={(e) => setProfile({ ...profile, mail: e.target.value })}
+              type="text"
+              name="nickname"
+              value={profile.nickname}
+              onChange={(e) => setProfile({ ...profile, nickname: e.target.value })}
             />
           </div>
-          
           <div className="field-group">
             <label>Default Currency:</label>
             <input
@@ -176,10 +114,10 @@ const ProfilePage = () => {
           </div>
 
           <Dropdown 
-           label="Crypto List"
-           options={cryptoOptions} 
-           selectedItems={profile.cryptoList} 
-           setSelectedItems={(items) => setProfile({ ...profile, cryptoList: items })}
+            label="Crypto List"
+            options={cryptoOptions} 
+            selectedItems={profile.cryptoList} 
+            setSelectedItems={(items) => setProfile({ ...profile, cryptoList: items })}
           />
 
           <Dropdown 

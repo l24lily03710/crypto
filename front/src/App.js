@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import LoginPage from './pages/LoginPage';
-import ProfilePage from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePage'; // Assuming this is correct
 import CryptoPage from './pages/CryptoPage';
 import PressReviewPage from './pages/PressReviewPage';
 import AdminPage from './pages/AdminPage';
@@ -13,7 +13,6 @@ function ProtectedRoute({ children }) {
   const { isLoggedIn } = useAccessLevel();
   return isLoggedIn ? children : <Navigate to="/login" />;
 }
-
 function App() {
   return (
     <AccessLevelProvider>
