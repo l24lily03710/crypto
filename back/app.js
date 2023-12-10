@@ -7,6 +7,7 @@ const cors = require("cors");
 const userRouter = require("./routes/user");
 const loginRouter = require("./routes/auth");
 const authMiddleware = require('./middleware/authMiddleware');
+require('dotenv').config();
 
 // DB connection
 var app = express();
