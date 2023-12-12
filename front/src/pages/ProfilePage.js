@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/ProfilePage.css';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import axios from 'axios';  
 
 const Dropdown = ({ options, selectedItems, setSelectedItems, label }) => {
@@ -63,12 +63,16 @@ const ProfilePage = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        if (decoded && decoded.user && decoded.user._id) {
-          setUserId(decoded.user._id);
-          fetchProfileData(decoded.user._id, token);
+        let userId;
+        if (decoded.user_id) { // For Google login structure
+          userId = decoded.user_id;
+        } else if (decoded.user && decoded.user._id) { // For traditional login structure
+          userId = decoded.user._id;
         } else {
           throw new Error('Invalid token payload');
         }
+        setUserId(userId);
+        fetchProfileData(userId, token);
       } catch (error) {
         console.error('Token decoding error:', error);
         navigate('/login');
@@ -77,6 +81,7 @@ const ProfilePage = () => {
       navigate('/login');
     }
   }, [navigate]);
+  
    
   const fetchProfileData = async (userId, token) => {
     if (!userId) {
