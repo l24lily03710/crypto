@@ -1,7 +1,23 @@
+/**
+ * Contrôleur gérant les opérations CRUD pour les utilisateurs.
+ * Comprend la validation des données, la gestion des erreurs et les opérations sur la base de données.
+ * @module UserController
+ */
+
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const UserCrypto = require("../models/userCryptos");
+const geckoApi = require("../../services/geckoApi");
+const { body, validationResult } = require("express-validator");
 
-const { param, body, validationResult } = require("express-validator");
-
+/**
+ * Règles de validation pour la création et la mise à jour des utilisateurs.
+ * @function
+ * @name userValidationRules
+ * @memberof module:UserController
+ * @inner
+ * @returns {Array} - Tableau de règles de validation Express.
+ */
 const userValidationRules = () => {
   return [
     body("username")
@@ -18,6 +34,17 @@ const userValidationRules = () => {
   ];
 };
 
+/**
+ * Middleware pour vérifier la validité des règles de validation.
+ * @function
+ * @name checkValidity
+ * @memberof module:UserController
+ * @inner
+ * @param {Object} req - Objet représentant la requête HTTP.
+ * @param {Object} res - Objet représentant la réponse HTTP.
+ * @param {function} next - Fonction pour passer au middleware suivant.
+ * @returns {Object} - Réponse JSON indiquant les erreurs de validation le cas échéant.
+ */
 const checkValidity = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -31,37 +58,17 @@ const checkValidity = (req, res, next) => {
   });
 };
 
-exports.create = [
-  userValidationRules(),
-  checkValidity,
-  async (req, res, next) => {
-    try {
-      // Vérifiez si l'utilisateur existe déjà avec la même adresse e-mail
-      const existingUser = await User.findOne({ mail: req.body.mail });
-
-      if (existingUser) {
-        // L'utilisateur existe déjà, renvoyez une réponse indiquant qu'il existe
-        return res
-          .status(409)
-          .json({ error: "User with this email already exists" });
-      }
-
-      // Si l'utilisateur n'existe pas encore, créez-le
-      const user = new User({
-        username: req.body.username,
-        mail: req.body.mail,
-        password: req.body.password,
-      });
-
-      await user.save();
-      return res.status(201).json({ message: "User created successfully!" });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-  },
-];
-
+/**
+ * Récupère tous les utilisateurs de la base de données.
+ * @function
+ * @name getAll
+ * @memberof module:UserController
+ * @inner
+ * @param {Object} req - Objet représentant la requête HTTP.
+ * @param {Object} res - Objet représentant la réponse HTTP.
+ * @param {function} next - Fonction pour passer au middleware suivant.
+ * @returns {Object} - Réponse JSON contenant les utilisateurs.
+ */
 exports.getAll = (req, res, next) => {
   User.find().exec(function (err, result) {
     if (err) {
@@ -71,6 +78,17 @@ exports.getAll = (req, res, next) => {
   });
 };
 
+/**
+ * Récupère un utilisateur par son identifiant.
+ * @function
+ * @name getById
+ * @memberof module:UserController
+ * @inner
+ * @param {Object} req - Objet représentant la requête HTTP avec le paramètre d'identifiant.
+ * @param {Object} res - Objet représentant la réponse HTTP.
+ * @param {function} next - Fonction pour passer au middleware suivant.
+ * @returns {Object} - Réponse JSON contenant l'utilisateur.
+ */
 exports.getById = [
   checkValidity,
   (req, res, next) => {
@@ -83,60 +101,114 @@ exports.getById = [
   },
 ];
 
-exports.update = [
-  userValidationRules(),
+/**
+ * Met à jour un utilisateur existant.
+ * @function
+ * @name update
+ * @memberof module:UserController
+ * @inner
+ * @param {Object} req - Objet représentant la requête HTTP avec le corps de la requête.
+ * @param {Object} res - Objet représentant la réponse HTTP.
+ * @param {function} next - Fonction pour passer au middleware suivant.
+ * @returns {Object} - Réponse JSON indiquant le résultat de la mise à jour.
+ */
+exports.update = async (req, res) => {
+  const userId = req.params.id; // Supposons que l'ID de l'utilisateur soit passé dans les paramètres de l'URL
+  const { username, mail, password, cryptoFavorites, role } = req.body;
+
+
+  try {
+
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Supprimer les entrées existantes dans la table pivot UserCrypto
+    await UserCrypto.deleteMany({ userId });
+
+    // Mettre à jour les crypto-monnaies favorites
+    if (cryptoFavorites && cryptoFavorites.length > 0) {
+      try {
+        const cryptoDetailsPromises = cryptoFavorites.map(
+          geckoApi.getCoinDetails
+        );
+        const cryptoDetails = await Promise.all(cryptoDetailsPromises);
+
+        const userCryptoEntries = cryptoDetails.map((crypto) => ({
+          userId: userId,
+          cryptoId: crypto.id,
+        }));
+
+        await UserCrypto.insertMany(userCryptoEntries);
+      } catch (error) {
+        console.error("Error fetching crypto details:", error.message);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+
+    // Mettre à jour les autres champs de l'utilisateur
+    const updateFields = {};
+    updateFields.cryptos = cryptoFavorites;
+    if (role) updateFields.role = role;
+    if (username) updateFields.username = username;
+    if (mail) updateFields.mail = mail;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updateFields.password = await bcrypt.hash(password, salt);
+    }
+
+    // Effectuer la mise à jour de l'utilisateur
+    const updatedUser = await User.findByIdAndUpdate(userId, updateFields, {
+      new: true, // Pour obtenir le document mis à jour plutôt que l'ancien
+    });
+
+    res.json(updatedUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+/**
+ * Supprime un utilisateur par son identifiant.
+ * @function
+ * @name delete
+ * @memberof module:UserController
+ * @inner
+ * @param {Object} req - Objet représentant la requête HTTP avec le paramètre d'identifiant.
+ * @param {Object} res - Objet représentant la réponse HTTP.
+ * @param {function} next - Fonction pour passer au middleware suivant.
+ * @returns {Object} - Réponse JSON indiquant le résultat de la suppression.
+ */
+exports.delete = [
   checkValidity,
   async (req, res, next) => {
     try {
-      const existingUser = await User.findById(req.params.id);
+      // Supprimer les entrées dans la table pivot UserCrypto
+      await UserCrypto.deleteByUserId(req.params.id);
 
-      if (!existingUser) {
-        return res
-          .status(404)
-          .json({ error: `User with id ${req.params.id} is not found!` });
+      // Supprimer l'utilisateur
+      const result = await User.findByIdAndRemove(req.params.id).exec();
+
+      if (!result) {
+        return res.status(404).json("User with id " + req.params.id + " is not found !");
       }
 
-      if (req.body.mail && req.body.mail !== existingUser.mail) {
-        const emailExists = await User.findOne({ mail: req.body.mail });
-
-        if (emailExists) {
-          return res
-            .status(409)
-            .json({ error: "Email already exists for another user." });
-        }
-      }
-
-      if (req.body.password) {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        existingUser.password = hashedPassword;
-      }
-
-      existingUser.username = req.body.username || existingUser.username;
-      existingUser.mail = req.body.mail || existingUser.mail;
-      existingUser.save();
-
-      return res.status(200).json({ message: "User updated successfully!" });
+      return res.status(200).json("User deleted successfully !");
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error" });
     }
   },
 ];
 
-exports.delete = [
-  checkValidity,
-  (req, res, next) => {
-    User.findByIdAndRemove(req.params.id).exec(function (err, result) {
-      if (err) {
-        return res.status(500).json(err);
-      }
-      if (!result) {
-        res
-          .status(404)
-          .json("User with id " + req.params.id + " is not found !");
-      }
-      return res.status(200).json("User deleted successfully !");
-    });
-  },
-];
+exports.getAllFavoriteCryptos = async (req, res, next) => {
+  try {
+    const cryptoDetails = await UserCrypto.find();
+    res.status(200).json(cryptoDetails);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur interne" });
+  }
+};

@@ -20,7 +20,6 @@
   margin: 0 10px;
   display: flex;
   align-items: center;
-  cursor: pointer; /* Changes cursor to pointer */
 }
 
 .Navbar-left span {
@@ -29,15 +28,14 @@
   background: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  color: transparent; /* This makes the text color transparent, showing the gradient */
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease-in-out;
 }
 
 .Navbar-left span:hover {
-  transform: scale(1.1);
+  transform: scale(1.1); /* Slightly enlarge on hover */
 }
-
 
  .Navbar-right span {
   margin: 0 10px;

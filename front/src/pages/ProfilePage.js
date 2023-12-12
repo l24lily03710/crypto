@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/ProfilePage.css';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';  
 
 const Dropdown = ({ options, selectedItems, setSelectedItems, label }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,20 +27,25 @@ const Dropdown = ({ options, selectedItems, setSelectedItems, label }) => {
       {isOpen && (
         <div className="dropdown-list">
           {options.map(option => (
-            <div key={option} className="dropdown-item" onClick={() => handleItemClick(option)}>
-              <input type="checkbox" checked={selectedItems.includes(option)} readOnly />
-              {option}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+            <div key={option} className="dropdown-item">
+            <input 
+              type="checkbox" 
+              checked={selectedItems.includes(option)} 
+              onChange={() => handleItemClick(option)} 
+            />
+            <label onClick={() => handleItemClick(option)}>{option}</label>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
   );
 };
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({
     nickname: '',
+    email: '',
     defaultCurrency: 'EUR',
     cryptoList: [],
     keywords: [],
@@ -46,47 +53,82 @@ const ProfilePage = () => {
 
   const cryptoOptions = ['Bitcoin', 'Ethereum', 'Litecoin', 'Ripple'];
   const keywordOptions = ['blockchain', 'mining', 'crypto', 'ledger'];
-
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded && decoded.user && decoded.user._id) {
+          setUserId(decoded.user._id);
+          fetchProfileData(decoded.user._id, token);
+        } else {
+          throw new Error('Invalid token payload');
+        }
+      } catch (error) {
+        console.error('Token decoding error:', error);
+        navigate('/login');
+      }
     } else {
-      fetchProfileData();
+      navigate('/login');
     }
   }, [navigate]);
+   
+  const fetchProfileData = async (userId, token) => {
+    if (!userId) {
+      setErrorMessage('User ID is undefined.');
+      return;
+    }
 
-  const fetchProfileData = async () => {
     try {
-      setTimeout(() => {
-        setProfile({
-          nickname: 'User123',
-          defaultCurrency: 'EUR',
-          cryptoList: ['Bitcoin', 'Ethereum'],
-          keywords: ['blockchain', 'mining']
-        });
-        setLoading(false);
-      }, 1000);
+      const response = await axios.get(`http://localhost:3000/users/profile/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const userData = response.data;
+      setProfile({
+        nickname: userData.username,
+        email: userData.mail,
+        defaultCurrency: 'EUR', 
+        cryptoList: userData.cryptos,
+        keywords: [] 
+      });
+      setLoading(false);
     } catch (error) {
       setLoading(false);
-      setErrorMessage('Failed to load profile data.');
+      setErrorMessage('Failed to load profile data. Error: ' + error.message);
     }
   };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!userId) {
+      setErrorMessage('User ID is undefined.');
+      return;
+    }
+
     try {
+      await axios.put(`http://localhost:3000/users/profile/${userId}`, {
+        username: profile.nickname,
+        mail: profile.email, 
+        cryptos: profile.cryptoList,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       alert('Profile updated successfully!');
-      // Here, you would send a PUT request to update the profile
     } catch (error) {
-      setErrorMessage('Failed to update profile.');
+      setErrorMessage('Failed to update profile. Error: ' + error.message);
     }
   };
-
+  if (loading) return <div>Loading...</div>;
   return (
     <>
       <Header />
@@ -104,12 +146,21 @@ const ProfilePage = () => {
             />
           </div>
           <div className="field-group">
+           <label>Email:</label>
+           <input
+             type="email"
+             name="email"
+             value={profile.email}
+             onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
             <label>Default Currency:</label>
             <input
               type="text"
               name="defaultCurrency"
               value={profile.defaultCurrency}
-              onChange={(e) => setProfile({ ...profile, defaultCurrency: e.target.value })}
+              readOnly // La devise est fixe et non modifiable
             />
           </div>
 

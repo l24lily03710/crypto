@@ -1,40 +1,19 @@
-import React from 'react';
-import { GoogleLogin } from 'react-google-login';
+// OAuthLogin.js
 
+import React from 'react';
 
 const OAuthLogin = () => {
-
-  
-  const handleGoogleResponse = async (response) => {
-    try {
-      const res = await fetch('http://localhost:3000/api/google-login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: response.tokenId }),
-      });
-
-      const data = await res.json();
-      if (res.status === 200) {
-        // Handle successful login
-      } else {
-        // Handle error
-      }
-    } catch (error) {
-      console.error("Google login error:", error);
-    }
-  };
   const googleClientId = "33402681899-mc2qmmb3hr4lpifl3jr1rasl9ascr5mq.apps.googleusercontent.com";
+  const redirectUri = 'http://localhost:3000/users/google-callback'; 
+
+  const handleGoogleLogin = () => {
+    const scope = encodeURIComponent('email profile');
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=online&prompt=consent`;
+    window.location.href = authUrl;
+  };
+
   return (
-    <div>
-      <GoogleLogin
-        clientId={googleClientId}
-        buttonText="Login with Google"
-        onSuccess={handleGoogleResponse}
-        onFailure={handleGoogleResponse}
-      />
-    </div>
+    <button onClick={handleGoogleLogin}>Login with Google</button>
   );
 };
 

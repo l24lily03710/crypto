@@ -1,18 +1,19 @@
+require('dotenv').config();
 const express = require("express");
+const expressListEndpoints = require('express-list-endpoints');
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRouter = require("./routes/user");
+const cryptoRouteur = require("./routes/crypto");
 const loginRouter = require("./routes/auth");
 const authMiddleware = require('./middleware/authMiddleware');
-require('dotenv').config();
 
 // DB connection
 var app = express();
-const connectionString =
-  "mongodb+srv://admin:dGMpI8Dz614zQ9Xx@crypto.g1gwxfl.mongodb.net/";
+const connectionString = "mongodb+srv://admin:admin@crypto.g1gwxfl.mongodb.net/";
 const mongoDB = process.env.MONGODB_URI || connectionString;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
@@ -26,10 +27,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());
-app.use("/api", loginRouter);
+app.use("/users", loginRouter);
+app.use("/cryptos", cryptoRouteur);
 
 // Protected routes
 app.use(authMiddleware.verifyToken);
-app.use("/api/users", userRouter);
+app.use("/users", userRouter);
 
+// Routes 
+console.log(expressListEndpoints(app));
 module.exports = app;

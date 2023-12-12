@@ -13,15 +13,27 @@ const LoginPage = () => {
   const { setIsLoggedIn, setAccessLevel } = useAccessLevel();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
     if (token) {
-      navigate('/'); // Redirect to the profile page if already logged in
+      // Handle token found in URL parameter
+      localStorage.setItem('token', token);
+      setIsLoggedIn(true);
+      setAccessLevel('User');
+      navigate('/profile');
+    } else {
+      // Check if already logged in with existing token
+      const existingToken = localStorage.getItem('token');
+      if (existingToken) {
+        navigate('/'); // Redirect to the profile page if already logged in
+      }
     }
-  }, [navigate]);
+  }, [navigate, setIsLoggedIn, setAccessLevel]);
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch('https://coin-market-api.vercel.app/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +49,7 @@ const LoginPage = () => {
         localStorage.setItem('token', data.token);
         setIsLoggedIn(true);
         setAccessLevel('User'); // Adjust this based on your application's needs
-        navigate('/profile');
+        navigate('/');
       } else {
         setError(data.error || 'An error occurred during login.');
       }
@@ -48,7 +60,7 @@ const LoginPage = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/register', {
+      const response = await fetch('https://coin-market-api.vercel.app/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,6 +86,22 @@ const LoginPage = () => {
     }
   };
 
+  const handleGoogleAuthSuccess = (token) => {
+    localStorage.setItem('token', token);
+    setIsLoggedIn(true);
+
+    // Parse the token to get the user ID (assuming the token is a JWT)
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    localStorage.setItem('user_id', payload.user_id);
+    const isNewUser = payload.isNewUser;
+    const userCryptoPreferences = payload.cryptos;
+
+    setAccessLevel('User');
+    navigate('/profile'); // Navigate to the user profile
+  
+};
+
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     isRegistering ? handleRegister() : handleLogin();
@@ -113,7 +141,7 @@ const LoginPage = () => {
           <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
         </form>  
         <div className="oauth-login-section">
-          <OAuthLogin />
+          <OAuthLogin onGoogleAuthSuccess={handleGoogleAuthSuccess}/>
         </div>
         <button type="button" onClick={toggleAuthMode} className="toggle-auth-mode">
           {isRegistering ? 'Already have an account? Login' : 'Need an account? Register'}

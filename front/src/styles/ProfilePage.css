@@ -1,5 +1,5 @@
 .profile-container {
-  background-color: #302c42;
+  background-color: #302c42; /* Consistent with the site's theme */
   color: #ffffff;
   min-height: 100vh;
   padding: 20px;
@@ -14,48 +14,25 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 500px;
-  align-items: center;
-  gap: 20px; /* Add gap between form elements */
+  max-width: 500px; /* Adjusted for profile form */
+  align-items: stretch;
 }
+
 
 .profile-form h2 {
-  color: #6dd5ed;
+  color: #6dd5ed; /* A bright color for headings */
   margin-bottom: 20px;
-}
-
-.field-group {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.profile-form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #ffffff; /* Ensure label color is visible */
 }
 
 .profile-form input, .profile-form select, .profile-form textarea {
   width: 100%;
   padding: 10px;
+  margin-bottom: 10px;
   border-radius: 5px;
   border: none;
-  background-color: #394056;
-  color: #ffffff;
+  background-color: #394056; /* Slightly lighter than page background */
+  color: #ffffff; /* White text for inputs */
   font-size: 1em;
-  font-family: 'Arial', sans-serif;
-}
-
-.profile-form input::placeholder {
-  color: #b0b0b0;
-}
-
-.profile-form input:focus {
-  outline: none;
-  border: 1px solid #6dd5ed;
 }
 
 .profile-form button {
@@ -71,70 +48,73 @@
 }
 
 .profile-form button:hover {
-  background-color: #2193b0;
+  background-color: #2193b0; /* Darker shade on hover */
 }
 
-.profile-form .error-message {
-  color: #ff6b6b;
+.profile-form .error {
+  color: #ff6b6b; /* Error color */
   margin-top: 10px;
 }
 
-/* Add styling for the selected tags */
-.tags-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.selected-tags span {
-  background-color: #6dd5ed;
-  color: #302c42;
-  padding: 5px 10px;
-  border-radius: 20px;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.2s ease;
-}
-
-.selected-tags span:hover {
-  background-color: #2193b0;
-}
-
-/* Styling for custom dropdown */
 .dropdown {
-  width: 100%;
+  margin: 20px 0;
 }
 
 .dropdown-header {
   background-color: #394056;
-  color: #ffffff;
+  color: #fff;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  display: block; /* S'assure qu'il s'étend sur toute la largeur */
 }
 
 .dropdown-list {
-  background-color: #394056;
-  color: #ffffff;
-  padding: 10px;
+  margin-top: 5px;
   border-radius: 5px;
-  position: absolute;
-  z-index: 10;
+  background-color: #394056;
+  color: #fff;
+  display: block; /* S'assure qu'il s'étend sur toute la largeur */
 }
 
 .dropdown-item {
+  padding: 12px 10px; /* Augmenter le rembourrage pour une meilleure taille et un clic facile */
+  cursor: pointer;
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  transition: background-color 0.3s ease; /* Ajouter une transition pour un survol doux */
 }
 
-.dropdown-item input[type='checkbox'] {
-  margin-right: 10px;
+.dropdown-item:hover {
+  background-color: #302c42; /* Changement de couleur au survol */
 }
 
+.dropdown-item input[type="checkbox"] {
+  margin-right: 10px; /* Espace entre la case à cocher et le texte */
+}
+
+.dropdown-item label {
+  margin-left: 10px;
+  flex-grow: 1; /* S'assure que le label prend tout l'espace disponible */
+}
+
+/* Responsiveness */
 @media (max-width: 768px) {
   .profile-form {
     max-width: 90%;
   }
+}
+.profile-form input, 
+.profile-form select, 
+.profile-form textarea, 
+.profile-form .dropdown-header, /* Apply styles to dropdown header */
+.profile-form button {
+  width: 100%; /* Full width */
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #394056; /* Slightly lighter than page background */
+  color: #ffffff; /* White text for inputs */
+  font-size: 1em;
 }
