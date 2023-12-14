@@ -29,15 +29,13 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    jwt.sign({ user: user }, secretKey, { expiresIn: "1h" }, (err, token) => {
+    jwt.sign({ user_id: user._id,  role: user.role}, secretKey, { expiresIn: "1h" }, (err, token) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: "Internal Server Error" });
       } else {
-        const { _id: user_id } = user;
-
         res.json({
-          user_id,
+          user_id: user._id,
           token,
         });
       }
@@ -69,6 +67,10 @@ exports.register = async (req, res) => {
 
     const newUser = new User({ username, mail, password, role });
 
+    if (role === 'admin' && !req.isAdmin) {
+      return res.status(403).json({ error: "Unauthorized role assignment" });
+    }
+
     if (cryptoFavorites && cryptoFavorites.length > 0) {
       try {
         const cryptoDetailsPromises = cryptoFavorites.map(
@@ -95,8 +97,9 @@ exports.register = async (req, res) => {
 
     const savedUser = await newUser.save();
 
+    // Sign a JWT token with the newly created user's ID
     jwt.sign(
-      { user: savedUser },
+      { user_id: savedUser._id ,  role: user.role},
       secretKey,
       { expiresIn: "1h" },
       (err, token) => {
@@ -104,10 +107,8 @@ exports.register = async (req, res) => {
           console.error(err);
           res.status(500).json({ error: "Internal Server Error" });
         } else {
-          const { _id: user_id } = savedUser;
-
           res.json({
-            user_id,
+            user_id: savedUser._id,
             token,
           });
         }

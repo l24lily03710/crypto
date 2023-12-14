@@ -51,7 +51,7 @@ const ProfilePage = () => {
     keywords: [],
   });
 
-  const cryptoOptions = ['Bitcoin', 'Ethereum', 'Litecoin', 'Ripple'];
+  const [cryptoOptions, setCryptoOptions] = useState([]);
   const keywordOptions = ['blockchain', 'mining', 'crypto', 'ledger'];
   const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
@@ -63,18 +63,24 @@ const ProfilePage = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+        console.log(decoded);
+  
+        // Determine the user ID based on the token structure
         let userId;
         if (decoded.user_id) { // For Google login structure
           userId = decoded.user_id;
-        } else if (decoded.user && decoded.user._id) { // For traditional login structure
-          userId = decoded.user._id;
+        } else if (decoded.user && decoded.user.id) { // For traditional login structure
+          userId = decoded.user.id;
         } else {
           throw new Error('Invalid token payload');
         }
+  
         setUserId(userId);
         fetchProfileData(userId, token);
+        fetchCryptoOptions(token);
       } catch (error) {
         console.error('Token decoding error:', error);
+        setErrorMessage(error.message); // Set error message
         navigate('/login');
       }
     } else {
@@ -82,7 +88,19 @@ const ProfilePage = () => {
     }
   }, [navigate]);
   
-   
+  const fetchCryptoOptions = async (token) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/users/favorite_crypto`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const cryptoData = response.data.map(crypto => crypto.name);
+      setCryptoOptions(cryptoData);
+    } catch (error) {
+      console.error('Failed to fetch crypto options:', error);
+    }
+  };
   const fetchProfileData = async (userId, token) => {
     if (!userId) {
       setErrorMessage('User ID is undefined.');
@@ -96,11 +114,12 @@ const ProfilePage = () => {
         }
       });
       const userData = response.data;
+      const cryptoList = userData.cryptos.map(crypto => crypto.name);
       setProfile({
         nickname: userData.username,
         email: userData.mail,
         defaultCurrency: 'EUR', 
-        cryptoList: userData.cryptos,
+        cryptoList: cryptoList,
         keywords: [] 
       });
       setLoading(false);
@@ -122,7 +141,7 @@ const ProfilePage = () => {
       await axios.put(`http://localhost:3000/users/profile/${userId}`, {
         username: profile.nickname,
         mail: profile.email, 
-        cryptos: profile.cryptoList,
+        cryptos: profile.cryptoList.map(crypto => ({ name: crypto })), 
       }, {
         headers: {
           Authorization: `Bearer ${token}`

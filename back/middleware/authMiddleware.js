@@ -19,7 +19,8 @@ const verifyToken = (req, res, next) => {
       console.error(err);
       return res.status(401).json({ error: 'Unauthorized: Invalid token' });
     } else {
-      req.user_id = decoded.user_id;
+      req.user_id = decoded.user_id ? decoded.user_id : decoded.user.id;
+      req.userRole = decoded.role; 
       next();
     }
   });

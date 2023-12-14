@@ -47,7 +47,8 @@ router.get('/google-callback', async (req, res) => {
           username: googleUser.name, 
           email: googleUser.email, 
           password: bcrypt.hashSync('someRandomPassword', 10),
-          cryptos: defaultCryptoPreferences 
+          cryptos: defaultCryptoPreferences,
+          role: 'user', // Default role
        
         });
         await user.save();
@@ -57,7 +58,6 @@ router.get('/google-callback', async (req, res) => {
   
       // Sign JWT token for user
       const jwtToken = jwt.sign({ user_id: user._id, isNewUser }, secretKey, { expiresIn: "1h" });
-  
       // Redirect back to the frontend with the token
       // Redirect back to the frontend with the token
       res.redirect(`http://localhost:3001/login?token=${jwtToken}`);

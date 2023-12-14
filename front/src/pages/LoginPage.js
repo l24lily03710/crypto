@@ -4,13 +4,21 @@ import Header from '../components/Header';
 import OAuthLogin from '../components/OAuthLogin';
 import '../styles/LoginPage.css';
 import { useAccessLevel } from '../contexts/AccessLevelContext';
+import AdminPage from '../pages/AdminPage';
 
 const LoginPage = () => {
-  const [credentials, setCredentials] = useState({ email: '', password: '', username: '' });
+  const [role, setRole] = useState('User');
+  const [cryptoFavorites, setCryptoFavorites] = useState([]);
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+    username: '',
+    
+  });
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setIsLoggedIn, setAccessLevel } = useAccessLevel();
+  const { setIsLoggedIn, setAccessLevel, accessLevel } = useAccessLevel();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -33,7 +41,7 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('https://coin-market-api.vercel.app/api/login', {
+      const response = await fetch('https://coin-market-api.vercel.app/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +68,7 @@ const LoginPage = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch('https://coin-market-api.vercel.app/api/register', {
+      const response = await fetch('https://coin-market-api.vercel.app/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,6 +77,9 @@ const LoginPage = () => {
           username: credentials.username,
           mail: credentials.email,
           password: credentials.password,
+          role: role,
+          cryptoFavorites: cryptoFavorites,
+       
         }),
       });
 
@@ -113,8 +124,12 @@ const LoginPage = () => {
   };
 
   return (
+    
     <div>
       <Header />
+      <div>
+        {accessLevel === 'admin' && <AdminPage />}
+      </div>
       <div className="auth-form-container">
         <h2>{isRegistering ? 'Register' : 'Login'}</h2>
         <form onSubmit={handleSubmit}>
