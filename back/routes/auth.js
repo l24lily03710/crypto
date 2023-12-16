@@ -38,14 +38,14 @@ router.get('/google-callback', async (req, res) => {
       const googleUser = ticket.getPayload();
   
       let isNewUser = false;
-      let defaultCryptoPreferences = ['bitcoin', 'ethereum']; // Example default cryptos
+      let defaultCryptoPreferences = ['Bitcoin']; 
 
       // Find or create user in your database
-      let user = await User.findOne({ email: googleUser.email });
+      let user = await User.findOne({ mail: googleUser.email });
       if (!user) {
         user = new User({
           username: googleUser.name, 
-          email: googleUser.email, 
+          mail: googleUser.email, 
           password: bcrypt.hashSync('someRandomPassword', 10),
           cryptos: defaultCryptoPreferences,
           role: 'user', // Default role
@@ -83,7 +83,7 @@ router.get('/google-callback', async (req, res) => {
           await user.save();
         }
     
-        const jwtToken = jwt.sign({ user }, secretKey, { expiresIn: "1h" });
+        const jwtToken = jwt.sign({ user_id: user._id }, secretKey, { expiresIn: "1h" });
     
         res.json({ token: jwtToken });
       } catch (error) {
