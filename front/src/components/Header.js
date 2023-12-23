@@ -4,8 +4,9 @@ import '../styles/Homepage.css';
 import { useAccessLevel } from '../contexts/AccessLevelContext';
 
 const Header = () => {
-  const { isLoggedIn, logout } = useAccessLevel();
+  const { isLoggedIn, logout, userRole } = useAccessLevel();
   const navigate = useNavigate();
+  console.log('User Role in Header: ', userRole);
 
   const handleSignOut = () => {
     logout();
@@ -13,11 +14,11 @@ const Header = () => {
   };
 
   const redirectToHome = () => {
-    navigate('/'); // Function to navigate to the homepage
+    navigate('/');
   };
 
   const handleSignIn = () => {
-    navigate('/login'); // Function to navigate to the login page
+    navigate('/login');
   };
 
   return (
@@ -28,13 +29,20 @@ const Header = () => {
       <div className="Navbar-right">
         <span onClick={() => navigate('/cryptos')}>Crypto Currencies</span>
         <span onClick={() => navigate('/press-reviews')}>Press Review</span>
+        {userRole === 'admin' && (
+          <span onClick={() => navigate('/admin')}>AdminPage</span>
+        )}
         {isLoggedIn ? (
           <>
-            <span onClick={() => navigate('/profile')}>Profile</span>
+            {userRole !== 'anonymous' && (
+              <span onClick={() => navigate('/profile')}>Profile</span>
+            )}
             <span onClick={handleSignOut}>Sign Out</span>
           </>
         ) : (
-          <span className="SignInButton" onClick={handleSignIn}>Sign In</span>
+          <span className="SignInButton" onClick={handleSignIn}>
+            Sign In
+          </span>
         )}
       </div>
     </nav>

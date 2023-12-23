@@ -1,18 +1,40 @@
-.auth-form-container {
+
+.login-page-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #302c42; /* Same as homepage background */
-  color: #ffffff; /* Light text color for contrast */
-  font-family: 'Arial', sans-serif;
-  padding: 20px;
-  box-sizing: border-box;
+  background-image: url('../../public/site.png'); 
+  background-size: cover;
+  background-position: center;
+}
+
+
+.auth-form-container {
+  -webkit-backdrop-filter: blur(80px) brightness(100%);
+  backdrop-filter: blur(80px) brightness(100%);
+  background: radial-gradient(
+  50% 50% at 50% 50%,
+  rgba(166, 153, 176, 0.2) 0%,
+  rgba(199, 158, 203, 0.02) 77.08%,
+  rgba(194, 161, 218, 0.2) 100%
+  );
+
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow:0 4px 8px rgba(207, 194, 204, 0.2);
+  max-width: 400px; 
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .auth-form-container h2 {
-  color: #6dd5ed; /* A bright color for headings */
+  color: #98738b; 
   margin-bottom: 20px;
 }
 
@@ -20,8 +42,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 300px; /* Width of the form */
+  max-width: 300px; 
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .auth-form-container input {
@@ -31,13 +54,15 @@
   border-radius: 5px;
   border: none;
   font-size: 1em;
+  background-color: #b0a0ad;  
+  color: #e8eff0;
 }
 
 .auth-form-container button {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  background-image: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
+  background-color: #71566c; 
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -45,7 +70,7 @@
   transition: background-color 0.3s ease;
 }
 .auth-form-container button:hover {
-  background-color: #2193b0; /* Darker shade on hover */
+  background-color: #6e4f68; 
 }
 
 .oauth-login-section {
@@ -54,19 +79,17 @@
 
 .toggle-auth-mode {
   background: transparent;
-  color: #ffffff;
-  border: 1px solid #6dd5ed; /* Border matching button color */
+  color: #110e10; 
+  border: 1px solid #6e4f68; 
   transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 .toggle-auth-mode:hover {
-  color: #2193b0;
-  border-color: #2193b0;
+  color: #3c1a41;
+  border-color: #6e4f68;
 }
 
 .error {
-  color: #ff6b6b; /* Error color */
+  color: #ff6b6b; 
   margin-top: 10px;
 }
-
-/* Add any additional styling as needed */

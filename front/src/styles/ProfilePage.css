@@ -1,42 +1,67 @@
-.profile-container {
-  background-color: #302c42; /* Consistent with the site's theme */
-  color: #ffffff;
+.profile-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
+  background-image: url('../../public/site.png'); 
+  background-size: cover;
+  background-position: center;
+}
+
+h2 {
+  color: #fbf7fa;
+  display: center;
+  justify-content: center;
+  margin-left: 155px;
+}
+
+.profile-container {
+  -webkit-backdrop-filter: blur(80px) brightness(100%);
+  backdrop-filter: blur(80px) brightness(100%);
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(166, 153, 176, 0.2) 0%,
+    rgba(199, 158, 203, 0.02) 77.08%,
+    rgba(194, 161, 218, 0.2) 100%
+  );
+  border-radius: 59px;
+  top: 0;
+  width: 447px;
   padding: 20px;
+  box-shadow: 0 4px 8px rgba(3, 149, 240, 0.2);
+  max-width: 500px;
+  margin: 20px;
+  color: #ebf0f1;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
 }
 
 .profile-form {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 500px; /* Adjusted for profile form */
+  max-width: 500px;
   align-items: stretch;
 }
 
-
 .profile-form h2 {
-  color: #6dd5ed; /* A bright color for headings */
+  color: #ab90ad;
   margin-bottom: 20px;
 }
 
 .profile-form input, .profile-form select, .profile-form textarea {
-  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
   border: none;
-  background-color: #394056; /* Slightly lighter than page background */
-  color: #ffffff; /* White text for inputs */
+  background-color: #0fa7ed;
+  color: #f4fafd;
   font-size: 1em;
 }
 
 .profile-form button {
-  width: 100%;
   padding: 10px;
   margin-top: 10px;
   background-image: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
@@ -48,73 +73,32 @@
 }
 
 .profile-form button:hover {
-  background-color: #2193b0; /* Darker shade on hover */
+  background-color: #6e4f68;
 }
 
 .profile-form .error {
-  color: #ff6b6b; /* Error color */
+  color: #ff6b6b;
   margin-top: 10px;
 }
 
-.dropdown {
-  margin: 20px 0;
-}
-
-.dropdown-header {
-  background-color: #394056;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  display: block; /* S'assure qu'il s'étend sur toute la largeur */
-}
-
-.dropdown-list {
-  margin-top: 5px;
-  border-radius: 5px;
-  background-color: #394056;
-  color: #fff;
-  display: block; /* S'assure qu'il s'étend sur toute la largeur */
-}
-
-.dropdown-item {
-  padding: 12px 10px; /* Augmenter le rembourrage pour une meilleure taille et un clic facile */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: background-color 0.3s ease; /* Ajouter une transition pour un survol doux */
-}
-
-.dropdown-item:hover {
-  background-color: #302c42; /* Changement de couleur au survol */
-}
-
-.dropdown-item input[type="checkbox"] {
-  margin-right: 10px; /* Espace entre la case à cocher et le texte */
-}
-
-.dropdown-item label {
-  margin-left: 10px;
-  flex-grow: 1; /* S'assure que le label prend tout l'espace disponible */
-}
-
-/* Responsiveness */
 @media (max-width: 768px) {
   .profile-form {
     max-width: 90%;
   }
 }
-.profile-form input, 
-.profile-form select, 
-.profile-form textarea, 
-.profile-form .dropdown-header, /* Apply styles to dropdown header */
-.profile-form button {
-  width: 100%; /* Full width */
+
+.profile-form input, .profile-form select, .profile-form textarea, .profile-form button {
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
   border: none;
-  background-color: #394056; /* Slightly lighter than page background */
-  color: #ffffff; /* White text for inputs */
+  background-image: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
+  color: #544750;
   font-size: 1em;
+}
+
+.profile-form button {
+  background-image: linear-gradient(180deg, rgb(69, 9, 72) 0%, rgb(105, 41, 106) 100%);
+  color: #be93b1;
 }

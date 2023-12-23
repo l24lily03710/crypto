@@ -1,0 +1,58 @@
+.crypto-history-page-container {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  
+  
+  .chart-container {
+    margin-bottom: 30px;
+    width: 100%;
+  }
+  
+  .chart-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .chart-container h2 {
+    margin-bottom: 10px;
+    color: #000;
+  }
+  
+  .half-width {
+    width: calc(50% - 10px); 
+  }
+  .crypto-description {
+    margin-top: 30px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .crypto-description h2 {
+    margin-bottom: 15px;
+  }
+  
+  @media (max-width: 768px) {
+    .chart-container, .half-width {
+      width: 100%;
+    }
+  }
+  .current-price-section {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .current-price-section h2 {
+    color: navy; 
+    margin: 0;
+  }
+  
+  .current-price-section p {
+    margin: 5px 0;
+    font-weight: bold;
+  }
+  

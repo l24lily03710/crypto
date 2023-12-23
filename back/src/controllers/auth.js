@@ -29,17 +29,23 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    jwt.sign({ user_id: user._id,  role: user.role}, secretKey, { expiresIn: "1h" }, (err, token) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.json({
-          user_id: user._id,
-          token,
-        });
+    jwt.sign(
+      { user_id: user._id, role: user.role },
+      secretKey,
+      { expiresIn: "1h" },
+      (err, token) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: "Internal Server Error" });
+        } else {
+          res.json({
+            user_id: user._id,
+            role: user.role,
+            token,
+          });
+        }
       }
-    });
+    );
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -67,7 +73,7 @@ exports.register = async (req, res) => {
 
     const newUser = new User({ username, mail, password, role });
 
-    if (role === 'admin' && !req.isAdmin) {
+    if (role === "admin" && !req.isAdmin) {
       return res.status(403).json({ error: "Unauthorized role assignment" });
     }
 
@@ -77,7 +83,7 @@ exports.register = async (req, res) => {
           geckoApi.getCoinDetails
         );
         const cryptoDetails = await Promise.all(cryptoDetailsPromises);
-        
+
         newUser.cryptos = cryptoDetails.map((crypto) => crypto.id);
 
         const userCryptoEntries = cryptoDetails.map((crypto) => ({
@@ -99,7 +105,7 @@ exports.register = async (req, res) => {
 
     // Sign a JWT token with the newly created user's ID
     jwt.sign(
-      { user_id: savedUser._id ,  role: user.role},
+      { user_id: savedUser._id, role: user.role },
       secretKey,
       { expiresIn: "1h" },
       (err, token) => {
@@ -109,6 +115,7 @@ exports.register = async (req, res) => {
         } else {
           res.json({
             user_id: savedUser._id,
+            role: user.role,
             token,
           });
         }

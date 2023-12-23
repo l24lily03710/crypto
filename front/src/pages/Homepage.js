@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/Homepage.css';
 
@@ -15,6 +15,12 @@ export const Homepage = () => {
 
     const handleSignOut = () => {
         setIsLoggedIn(false);
+    };
+    const navigateToCrypto = () => {
+        navigate('/cryptos');
+    };
+    const navigateToPressReview = () => {
+        navigate('/press-reviews');
     };
 
     return (
@@ -37,17 +43,17 @@ export const Homepage = () => {
                 </div>
             </div>
             <div className="Sections">
-                <div className="Section">
+                <div className="Section" onClick={navigateToCrypto}>
                     <img src="/currency.png" alt="Crypto" />
                     <h2>Crypto-Currencies</h2>
                     <p>showing current trends in cryptocurrency.</p>
                 </div>
-                <div className="Section">
+                <div className="Section" onClick={navigateToPressReview}>
                     <img src="/newspaper.png" alt="Press" />
                     <h2>Press-Review</h2>
                     <p>Displaying the latest articles.</p>
                 </div>
-                <div className="Section">
+                <div className="Section" onClick={handleSignIn}>
                     <img src="/profile.png" alt="Sign Up" />
                     <h2>Sign Up</h2>
                     <p>Join the Crypto Revolution - Personalize, Explore, Grow.</p>

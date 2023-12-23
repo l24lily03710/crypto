@@ -116,14 +116,12 @@ exports.update = async (req, res) => {
   const userId = req.params.id; // Supposons que l'ID de l'utilisateur soit passé dans les paramètres de l'URL
   const { username, mail, password, cryptoFavorites, role } = req.body;
 
-
   try {
-
     const existingUser = await User.findById(userId);
     if (!existingUser) {
       return res.status(404).json({ error: "User not found" });
     }
-    
+
     // Supprimer les entrées existantes dans la table pivot UserCrypto
     await UserCrypto.deleteMany({ userId });
 
@@ -192,7 +190,9 @@ exports.delete = [
       const result = await User.findByIdAndRemove(req.params.id).exec();
 
       if (!result) {
-        return res.status(404).json("User with id " + req.params.id + " is not found !");
+        return res
+          .status(404)
+          .json("User with id " + req.params.id + " is not found !");
       }
 
       return res.status(200).json("User deleted successfully !");

@@ -1,10 +1,9 @@
-// OAuthLogin.js
-
 import React from 'react';
 
 const OAuthLogin = () => {
-  const googleClientId = "33402681899-mc2qmmb3hr4lpifl3jr1rasl9ascr5mq.apps.googleusercontent.com";
-  const redirectUri = 'http://localhost:3000/users/google-callback'; 
+  const googleClientId =
+    '33402681899-mc2qmmb3hr4lpifl3jr1rasl9ascr5mq.apps.googleusercontent.com';
+  const redirectUri = 'http://localhost:3000/users/google-callback';
 
   const handleGoogleLogin = () => {
     const scope = encodeURIComponent('email profile');
@@ -12,9 +11,7 @@ const OAuthLogin = () => {
     window.location.href = authUrl;
   };
 
-  return (
-    <button onClick={handleGoogleLogin}>Login with Google</button>
-  );
+  return <button onClick={handleGoogleLogin}>Login with Google</button>;
 };
 
 export default OAuthLogin;
