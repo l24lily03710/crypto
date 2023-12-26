@@ -17,7 +17,7 @@ const LoginPage = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setIsLoggedIn, setAccessLevel, accessLevel, setUserRole } =
+  const { setIsLoggedIn, setAccessLevel, accessLevel, setUserRole, setToken } =
     useAccessLevel();
 
   useEffect(() => {
@@ -36,7 +36,8 @@ const LoginPage = () => {
     } else {
       const existingToken = localStorage.getItem('token');
       if (existingToken) {
-        navigate('/'); // Redirect to the profile page if already logged in
+        navigate('/', { replace: true });
+        setTimeout(() => window.location.reload(), 100);
       }
     }
   }, [navigate, setIsLoggedIn, setAccessLevel, setUserRole]);
@@ -61,11 +62,13 @@ const LoginPage = () => {
       if (response.status === 200) {
         const decodedToken = jwtDecode(data.token);
         localStorage.setItem('token', data.token);
-
+        setToken(data.token);
         setIsLoggedIn(true);
         setAccessLevel(decodedToken.role);
         setUserRole(decodedToken.role);
-        navigate('/profile');
+
+        navigate('/', { replace: true });
+        setTimeout(() => window.location.reload(), 100);
       } else {
         setError(data.error || 'An error occurred during login.');
       }
@@ -101,7 +104,8 @@ const LoginPage = () => {
         setIsLoggedIn(true);
         setAccessLevel(decodedToken.role);
         setUserRole(decodedToken.role);
-        navigate('/profile');
+        navigate('/', { replace: true });
+        setTimeout(() => window.location.reload(), 100);
       } else {
         setError(data.error || 'An error occurred during registration.');
       }
@@ -112,13 +116,14 @@ const LoginPage = () => {
 
   const handleGoogleAuthSuccess = token => {
     localStorage.setItem('token', token);
+
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    localStorage.setItem('user_id', decodedToken.user_id);
     setIsLoggedIn(true);
-
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    localStorage.setItem('user_id', payload.user_id);
-
-    setAccessLevel('User');
-    navigate('/profile');
+    setAccessLevel(decodedToken.role);
+    setUserRole(decodedToken.role);
+    navigate('/', { replace: true });
+    setTimeout(() => window.location.reload(), 100);
   };
 
   const handleSubmit = e => {

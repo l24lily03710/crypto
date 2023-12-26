@@ -1,30 +1,21 @@
-
 .login-page-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-image: url('../../public/site.png'); 
-  background-size: cover;
+  background-color: #302c42;
   background-position: center;
 }
-
 
 .auth-form-container {
   -webkit-backdrop-filter: blur(80px) brightness(100%);
   backdrop-filter: blur(80px) brightness(100%);
-  background: radial-gradient(
-  50% 50% at 50% 50%,
-  rgba(166, 153, 176, 0.2) 0%,
-  rgba(199, 158, 203, 0.02) 77.08%,
-  rgba(194, 161, 218, 0.2) 100%
-  );
+  background: radial-gradient(circle, #4e5870 0%, #393e46 100%); 
 
   padding: 40px;
   border-radius: 10px;
-  box-shadow:0 4px 8px rgba(207, 194, 204, 0.2);
-  max-width: 400px; 
+  max-width: 400px;
   width: 100%;
   margin: 20px;
   display: flex;
@@ -34,62 +25,64 @@
 }
 
 .auth-form-container h2 {
-  color: #98738b; 
+  color: #092e37;
   margin-bottom: 20px;
+  justify-content: center;
 }
 
 .auth-form-container form {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 300px; 
   align-items: center;
   margin-bottom: 20px;
 }
 
-.auth-form-container input {
-  width: 100%;
+.auth-form-container input,
+.auth-form-container button,
+.oauth-login-section {
+  width: 100%; 
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
   border: none;
   font-size: 1em;
-  background-color: #b0a0ad;  
-  color: #e8eff0;
+}
+
+.auth-form-container input {
+  background-color: #bfccd2;
+  color: #042a2f;
 }
 
 .auth-form-container button {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #71566c; 
-  border: none;
-  border-radius: 5px;
+  background-color: #1f3c49;
+  color: white;
   cursor: pointer;
-  font-size: 1em;
   transition: background-color 0.3s ease;
 }
+
 .auth-form-container button:hover {
-  background-color: #6e4f68; 
+  background-color: #9bcadd;
 }
 
-.oauth-login-section {
-  margin-bottom: 20px;
-}
+
 
 .toggle-auth-mode {
-  background: transparent;
-  color: #110e10; 
-  border: 1px solid #6e4f68; 
-  transition: color 0.3s ease, border-color 0.3s ease;
+  background: none;
+  border: none;
+  color: #110e10;
+  cursor: pointer;
+  padding: 5px;
+  margin-top: 10px;
+  font-size: 0.9em;
+  transition: color 0.3s ease;
 }
 
 .toggle-auth-mode:hover {
-  color: #3c1a41;
-  border-color: #6e4f68;
+  color: #022330;
 }
 
 .error {
-  color: #ff6b6b; 
+  color: #ff6b6b;
   margin-top: 10px;
 }

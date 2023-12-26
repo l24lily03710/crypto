@@ -1,5 +1,7 @@
+
 .crypto-page-container {
   padding: 20px;
+
 }
 
 .crypto-list {
@@ -58,17 +60,17 @@
   border-radius: 50%;
 }
 
-
 .show-favorites-btn {
   padding: 10px;
   margin-bottom: 20px;
-  background-color: #4caf50;
-  color: white;
+  background-color: #233e41;
+  color: rgb(242, 247, 248);
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  
 }
 
 .show-favorites-btn:hover {
-  background-color: #45a049;
+  background-color: #186265;
 }

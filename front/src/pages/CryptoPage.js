@@ -98,7 +98,7 @@ const CryptoPage = () => {
         <h1>Cryptocurrencies</h1>
 
         {userRole !== 'anonymous' && (
-          <button onClick={toggleFavorites}>
+          <button className="show-favorites-btn" onClick={toggleFavorites}>
             {showFavorites ? 'Show All' : 'Show Favorites'}
           </button>
         )}

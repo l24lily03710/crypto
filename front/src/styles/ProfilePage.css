@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url('../../public/site.png'); 
+  background-color: #302c42;
   background-size: cover;
   background-position: center;
 }
@@ -18,12 +18,7 @@ h2 {
 .profile-container {
   -webkit-backdrop-filter: blur(80px) brightness(100%);
   backdrop-filter: blur(80px) brightness(100%);
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    rgba(166, 153, 176, 0.2) 0%,
-    rgba(199, 158, 203, 0.02) 77.08%,
-    rgba(194, 161, 218, 0.2) 100%
-  );
+  background:radial-gradient(circle, #4e5870 0%, #393e46 100%); 
   border-radius: 59px;
   top: 0;
   width: 447px;
@@ -41,7 +36,7 @@ h2 {
 .profile-form {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   max-width: 500px;
   align-items: stretch;
 }
@@ -56,7 +51,7 @@ h2 {
   margin-bottom: 10px;
   border-radius: 5px;
   border: none;
-  background-color: #0fa7ed;
+  background-color: #2b3a41;
   color: #f4fafd;
   font-size: 1em;
 }
@@ -91,14 +86,18 @@ h2 {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: 5px;
   border: none;
+  border-radius: 5px;
+
   background-image: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
-  color: #544750;
+  color: #224251;
   font-size: 1em;
 }
 
 .profile-form button {
-  background-image: linear-gradient(180deg, rgb(69, 9, 72) 0%, rgb(105, 41, 106) 100%);
-  color: #be93b1;
+  background-image: linear-gradient(180deg, rgb(128.7, 118.34, 175.31) 0%, rgb(192.14, 183.37, 231.63) 100%);
+  color: #224251;
+  width: 50%;
+  align-self: center;
+ 
 }

@@ -5,12 +5,13 @@ import { useAccessLevel } from '../contexts/AccessLevelContext';
 
 const Header = () => {
   const { isLoggedIn, logout, userRole } = useAccessLevel();
+
   const navigate = useNavigate();
   console.log('User Role in Header: ', userRole);
 
   const handleSignOut = () => {
     logout();
-    navigate('/');
+    navigate('/login');
   };
 
   const redirectToHome = () => {

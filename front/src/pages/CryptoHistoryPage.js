@@ -34,7 +34,7 @@ const CryptoHistoryPage = () => {
         <h1> History of {cryptoName} </h1>
 
         <div className="chart-container">
-          <h2>Price History (Last {days} Days)</h2>
+          <h3>Price History (Last {days} Days)</h3>
           <Line
             data={formatChartData(
               cryptoHistory.prices,
@@ -46,7 +46,7 @@ const CryptoHistoryPage = () => {
         </div>
         <div className="chart-row">
           <div className="chart-container half-width">
-            <h2>Market Cap History (Last {days} Days)</h2>
+            <h3>Market Cap History (Last {days} Days)</h3>
             <Line
               data={formatChartData(
                 cryptoHistory.market_caps,
@@ -58,7 +58,7 @@ const CryptoHistoryPage = () => {
           </div>
 
           <div className="chart-container half-width">
-            <h2>Total Volume History (Last {days} Days)</h2>
+            <h3>Total Volume History (Last {days} Days)</h3>
             <Line
               data={formatChartData(
                 cryptoHistory.total_volumes,
@@ -69,7 +69,7 @@ const CryptoHistoryPage = () => {
             />
           </div>
           <div className="crypto-description">
-            <h2>About {cryptoName}</h2>
+            <h3>About {cryptoName}</h3>
             <p>{description || 'No description available.'}</p>
           </div>
         </div>

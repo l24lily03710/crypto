@@ -16,11 +16,12 @@ export const AccessLevelProvider = ({ children }) => {
       try {
         const decoded = jwtDecode(token);
         console.log('Decoded token:', decoded);
-        if (decoded.user && decoded.user.role) {
+
+        if (decoded.role || decoded.user.role) {
           setIsLoggedIn(true);
-          setAccessLevel(decoded.user.role);
-          setUserRole(decoded.user.role);
-          console.log('Updated userRole:', decoded.user.role);
+          setAccessLevel(decoded.role || decoded.user.role);
+          setUserRole(decoded.role || decoded.user.role);
+          console.log('Updated userRole:', decoded.role || decoded.user.role);
         } else {
           console.error('Role not found in token');
         }
@@ -29,7 +30,6 @@ export const AccessLevelProvider = ({ children }) => {
       }
     } else {
       setIsLoggedIn(false);
-      setAccessLevel('Anonymous');
       setUserRole('anonymous');
     }
   }, [token]);
@@ -38,8 +38,8 @@ export const AccessLevelProvider = ({ children }) => {
     localStorage.removeItem('token');
     setToken(null);
     setIsLoggedIn(false);
-    setAccessLevel('Anonymous');
     setUserRole('anonymous');
+    setAccessLevel('Anonymous');
   };
 
   const setTokenMethod = newToken => {
